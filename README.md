@@ -12,3 +12,12 @@ The service installs as a Windows Service and subscribes to document events.
 1. Signere.no account  (contact sales@signere.no to get)
 2. Signere.no API-id and API key (contact sales@signere.no to get)
 3. Signere.no eventqueue connectionstring (contact support@signere.no to get)
+
+#### Settings in the .config file:
+* API-ID (Signere account id)
+* API-KEY (Signere accountkey)
+* EventQueueConnectionString (you'll get this from Signere.no support)
+* DownloadPath (Path on local machine to download files to)
+* MetaDataFormat (xml, json or none)
+* FilesToDownload (sdo, pades, all)
+
