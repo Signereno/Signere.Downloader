@@ -18,6 +18,7 @@ The service installs as a Windows Service and subscribes to document events.
 * API-KEY (Should be your Signere secondary API key)
 * EventQueueConnectionString (you'll get this from Signere.no support)
 * DownloadPath (Path on the local machine to download and save the files to)
+* FilenameFormat (SignereDocumentId, ExternalID (your id))
 * MetaDataFormat (either "xml", "json" or "none")
 * FilesToDownload (either "sdo", "pades" or "all")
 
