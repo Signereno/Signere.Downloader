@@ -38,8 +38,11 @@ namespace Unipluss.Sign.Downloader
                 Log.Logger.Error(msg);
                 throw new ApplicationException(msg);
             }
+            
+
 
             client
+                .UseTestEnvironment(AppSettingsReader.UseSignereTestEnvironment)
                 .AddRebusCompatibeLogger(x=>x.Serilog(Log.Logger))
                 .SubscribeToDocumentSignedEvent(
                     AppSettingsReader.MetaDataFormat==MetaDataFormat.NONE ? (Func<DocumentSignedEvent, Task>) null:DocumentSignedEvent)

@@ -19,7 +19,8 @@ namespace Unipluss.Sign.Downloader
        
                 x.SetDescription("Signere.no downloader service");        //7
                 x.SetDisplayName("Signere.no downloader");                       //8
-                x.SetServiceName("Signere.Downloader");      
+                x.SetServiceName("Signere.Downloader");
+                x.StartAutomatically(); //   
                 //9
             });                                                  //10
         }

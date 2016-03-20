@@ -1,15 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Unipluss.Sign.Downloader
 {
     public static class AppSettingsReader
     {
+        public static bool UseSignereTestEnvironment
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(GetSetting("UseSignereTestEnvironment")))
+                    return false;
 
+                bool result = false;
+                bool.TryParse(GetSetting("UseSignereTestEnvironment"), out result);
+                return result;
+
+            }
+        }
         public static string DownloadPath => GetSetting("DownloadPath");
         public static Guid ApiID =>new Guid(GetSetting("API-ID"));
 
