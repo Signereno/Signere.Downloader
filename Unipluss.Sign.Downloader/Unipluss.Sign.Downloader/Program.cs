@@ -1,3 +1,4 @@
+using System;
 using Topshelf;
 
 namespace Unipluss.Sign.Downloader

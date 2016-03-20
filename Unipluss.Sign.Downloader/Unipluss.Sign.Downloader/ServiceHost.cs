@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Rebus.Serilog;
 using Serilog;
-using Serilog.Events;
 using Unipluss.Sign.Events.Client;
 using Unipluss.Sign.Events.Entities;
 
@@ -39,14 +38,20 @@ namespace Unipluss.Sign.Downloader
                 Log.Logger.Error(msg);
                 throw new ApplicationException(msg);
             }
+
             client
                 .AddRebusCompatibeLogger(x=>x.Serilog(Log.Logger))
-                .SubscribeToDocumentSignedEvent(AppSettingsReader.MetaDataFormat==MetaDataFormat.NONE ? (Func<DocumentSignedEvent, Task>) null:DocumentSignedEvent)
-                .SubscribeToDocumentCanceledEvent(AppSettingsReader.MetaDataFormat == MetaDataFormat.NONE ? (Func<DocumentCanceledEvent, Task>)null : DocumentCanceledEvent)
-                .SubscribeToDocumentPartiallySignedEvent(AppSettingsReader.MetaDataFormat == MetaDataFormat.NONE ? (Func<DocumentPartiallySignedEvent, Task>)null : DocumentPartiallySignedEvent)
-                .SubscribeToDocumentPadesSavedEvent(AppSettingsReader.FilesToDownload == FilesToDownload.ALL || AppSettingsReader.FilesToDownload == FilesToDownload.PADES
+                .SubscribeToDocumentSignedEvent(
+                    AppSettingsReader.MetaDataFormat==MetaDataFormat.NONE ? (Func<DocumentSignedEvent, Task>) null:DocumentSignedEvent)
+                .SubscribeToDocumentCanceledEvent(
+                    AppSettingsReader.MetaDataFormat == MetaDataFormat.NONE ? (Func<DocumentCanceledEvent, Task>)null : DocumentCanceledEvent)
+                .SubscribeToDocumentPartiallySignedEvent(
+                    AppSettingsReader.MetaDataFormat == MetaDataFormat.NONE ? (Func<DocumentPartiallySignedEvent, Task>)null : DocumentPartiallySignedEvent)
+                .SubscribeToDocumentPadesSavedEvent(
+                    AppSettingsReader.FilesToDownload == FilesToDownload.ALL || AppSettingsReader.FilesToDownload == FilesToDownload.PADES
                     ? DocumentPadesSavedEvent :  (Func<DocumentPadesSavedEvent, byte[], Task>) null)
-                .SubscribeToDocumentSDOSavedEvent(AppSettingsReader.FilesToDownload == FilesToDownload.ALL || AppSettingsReader.FilesToDownload == FilesToDownload.SDO
+                .SubscribeToDocumentSDOSavedEvent(
+                    AppSettingsReader.FilesToDownload == FilesToDownload.ALL || AppSettingsReader.FilesToDownload == FilesToDownload.SDO
                     ? DocumentSDOSavedEvent : (Func<DocumentSDOSavedEvent, byte[], Task>)null)
                 .Start();
         }
@@ -54,14 +59,14 @@ namespace Unipluss.Sign.Downloader
         private Task DocumentSDOSavedEvent(DocumentSDOSavedEvent sdoSavedEvent, byte[] sdo)
         {
             File.WriteAllBytes(Path.Combine(AppSettingsReader.DownloadPath,
-                FileName(sdoSavedEvent.DocumentId, sdoSavedEvent.ExternalDocumentId, "sdo")), sdo);
+                createFileName(sdoSavedEvent.DocumentId, sdoSavedEvent.ExternalDocumentId, "sdo")), sdo);
             return Task.FromResult(true);
         }
 
-        private Task DocumentPadesSavedEvent(DocumentPadesSavedEvent padesSavedEvent, byte[] pades)
+        private Task DocumentPadesSavedEvent(DocumentPadesSavedEvent @event, byte[] pades)
         {
             File.WriteAllBytes(Path.Combine(AppSettingsReader.DownloadPath,
-                FileName(padesSavedEvent.DocumentId,padesSavedEvent.ExternalDocumentId,"sdo")),pades);
+                createFileName(@event.DocumentId,@event.ExternalDocumentId,"sdo")),pades);
             return Task.FromResult(true);
         }
 
@@ -79,9 +84,8 @@ namespace Unipluss.Sign.Downloader
 
         private Task DocumentSignedEvent(DocumentSignedEvent signedEvent)
         {
-           
-            SerializeEventToFile(signedEvent,signedEvent.DocumentId,signedEvent.ExternalDocumentId);
-            return Task.FromResult(true);
+           SerializeEventToFile(signedEvent,signedEvent.DocumentId,signedEvent.ExternalDocumentId);
+           return Task.FromResult(true);
         }
 
         private static void SerializeEventToFile<T>(T @event,Guid DocumentId,string ExternalDocumentId, string postfix=null)
@@ -92,9 +96,7 @@ namespace Unipluss.Sign.Downloader
             {
                 case MetaDataFormat.JSON:
                     extension = "json";
-                    data =
-                        Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event,
-                            Formatting.Indented, settings));
+                    data =Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event,Formatting.Indented, settings));
                     break;
                 case MetaDataFormat.XML:
                     extension = "xml";
@@ -104,23 +106,15 @@ namespace Unipluss.Sign.Downloader
                         x.Serialize(ms,@event);
                         data = ms.ToArray();
                     }
-                
                     break;
             }
             if (data != null && extension != null)
-                if (string.IsNullOrWhiteSpace(postfix))
-                {
-                    File.WriteAllBytes(Path.Combine(AppSettingsReader.DownloadPath,
-                        FileName(DocumentId, ExternalDocumentId, extension)), data);
-                }
-                else
-                {
-                    File.WriteAllBytes(Path.Combine(AppSettingsReader.DownloadPath,
-                        FileName(DocumentId, ExternalDocumentId, extension,postfix)), data);
-                }
+                File.WriteAllBytes(Path.Combine(AppSettingsReader.DownloadPath,
+                createFileName(DocumentId, ExternalDocumentId, extension, string.IsNullOrWhiteSpace(postfix)?null:postfix)), data);
+                
         }
 
-        private static string FileName(Guid docid, string externalDocumentId,string extension, string postFix=null)
+        private static string createFileName(Guid docid, string externalDocumentId,string extension, string postFix=null)
         {
             if (!string.IsNullOrWhiteSpace(postFix))
                 postFix = string.Format("_{0}", postFix);
