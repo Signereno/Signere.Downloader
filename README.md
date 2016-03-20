@@ -22,4 +22,4 @@ The service installs as a Windows Service and subscribes to document events.
 * MetaDataFormat (either "xml", "json" or "none")
 * FilesToDownload (either "sdo", "pades" or "all")
 
-### [Download](https://signerefiles.blob.core.windows.net/signeredownloader) or pull down the repo and compile the project for yourself.
+### [Download](https://github.com/Signereno/Signere.Downloader/raw/master/dist/Signere-Downloader.zip) or pull down the repo and compile the project for yourself.
