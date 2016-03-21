@@ -24,10 +24,7 @@ namespace Unipluss.Sign.Downloader
 
         public void Start()
         {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.AppSettings()
-                .CreateLogger();
-
+            
             settings.Converters.Add(new StringEnumConverter());
 
             if (!string.IsNullOrWhiteSpace(AppSettingsReader.APIPRIMARYKEY))

@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -95,12 +96,16 @@
       <HintPath>..\packages\Topshelf.3.3.1\lib\net40-full\Topshelf.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Unipluss.Sign.Events.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Signere.Events.1.0.1\lib\net45\Unipluss.Sign.Events.Client.dll</HintPath>
+    <Reference Include="Topshelf.Serilog, Version=3.3.154.0, Culture=neutral, PublicKeyToken=b800c4cfcdeea87b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Topshelf.Serilog.3.3.1\lib\net40-full\Topshelf.Serilog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Unipluss.Sign.Events.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Signere.Events.1.0.3\lib\net45\Unipluss.Sign.Events.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Unipluss.Sign.Events.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Signere.Events.1.0.1\lib\net45\Unipluss.Sign.Events.Entities.dll</HintPath>
+      <HintPath>..\packages\Signere.Events.1.0.3\lib\net45\Unipluss.Sign.Events.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
