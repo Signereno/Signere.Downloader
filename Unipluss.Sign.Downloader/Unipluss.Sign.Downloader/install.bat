@@ -1,2 +1,3 @@
-﻿SignereDownloader.exe install
-SigenreDownloader.exe start
+﻿REM Signere.no downloader installer
+SignereDownloader.exe install
+SignereDownloader.exe start
