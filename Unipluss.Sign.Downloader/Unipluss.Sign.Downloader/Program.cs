@@ -1,4 +1,3 @@
-using System;
 using Topshelf;
 
 namespace Unipluss.Sign.Downloader
@@ -7,22 +6,21 @@ namespace Unipluss.Sign.Downloader
     {
         public static void Main()
         {
-            HostFactory.Run(x =>                                 //1
+            HostFactory.Run(x =>
             {
-                x.Service<ServiceHost>(s =>                        //2
+                x.Service<ServiceHost>(s =>
                 {
-                    s.ConstructUsing(name => new ServiceHost());     //3
-                    s.WhenStarted(tc => tc.Start());              //4
-                    s.WhenStopped(tc => tc.Stop());               //5
+                    s.ConstructUsing(name => new ServiceHost());
+                    s.WhenStarted(tc => tc.Start());
+                    s.WhenStopped(tc => tc.Stop());
                 });
-                x.RunAsLocalSystem();                            //6
-       
-                x.SetDescription("Signere.no downloader service");        //7
-                x.SetDisplayName("Signere.no downloader");                       //8
+                x.RunAsLocalSystem();
+
+                x.SetDescription("Signere.no downloader service");
+                x.SetDisplayName("Signere.no downloader");
                 x.SetServiceName("Signere.Downloader");
-                x.StartAutomatically(); //   
-                //9
-            });                                                  //10
+                x.StartAutomatically();
+            });
         }
     }
 }

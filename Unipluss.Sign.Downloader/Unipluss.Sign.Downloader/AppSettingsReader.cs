@@ -13,22 +13,19 @@ namespace Unipluss.Sign.Downloader
                 if (string.IsNullOrWhiteSpace(GetSetting("UseSignereTestEnvironment")))
                     return false;
 
-                bool result = false;
+                var result = false;
                 bool.TryParse(GetSetting("UseSignereTestEnvironment"), out result);
                 return result;
-
             }
         }
+
         public static string DownloadPath => GetSetting("DownloadPath");
-        public static Guid ApiID =>new Guid(GetSetting("API-ID"));
-
+        public static Guid ApiID => new Guid(GetSetting("API-ID"));
         public static string APIPRIMARYKEY => GetSetting("API-PRIMARYKEY");
-
         public static string APISECONDARYKEY => GetSetting("API-SECONDARYKEY");
 
-        public static string EventQueueConnectionString => ConfigurationManager.ConnectionStrings["EventQueueConnectionString"].ConnectionString;
-
-
+        public static string EventQueueConnectionString
+            => ConfigurationManager.ConnectionStrings["EventQueueConnectionString"].ConnectionString;
 
         public static FilesToDownload FilesToDownload
         {
@@ -37,7 +34,7 @@ namespace Unipluss.Sign.Downloader
                 try
                 {
                     var value = GetSetting("FilesToDownload");
-                    FilesToDownload result=FilesToDownload.NONE;
+                    var result = FilesToDownload.NONE;
 
                     Enum.TryParse(value, true, out result);
                     return result;
@@ -56,7 +53,7 @@ namespace Unipluss.Sign.Downloader
                 try
                 {
                     var value = GetSetting("FilenameFormat");
-                    FilenameFormat result = FilenameFormat.SIGNEREDOCUMENTID;
+                    var result = FilenameFormat.SIGNEREDOCUMENTID;
 
                     Enum.TryParse(value, true, out result);
                     return result;
@@ -67,6 +64,7 @@ namespace Unipluss.Sign.Downloader
                 }
             }
         }
+
         public static MetaDataFormat MetaDataFormat
         {
             get
@@ -74,7 +72,7 @@ namespace Unipluss.Sign.Downloader
                 try
                 {
                     var value = GetSetting("MetaDataFormat");
-                    MetaDataFormat result = MetaDataFormat.NONE;
+                    var result = MetaDataFormat.NONE;
 
                     Enum.TryParse(value, true, out result);
                     return result;
@@ -90,13 +88,13 @@ namespace Unipluss.Sign.Downloader
         {
             if (string.IsNullOrWhiteSpace(key))
                 return null;
-            if(ConfigurationManager.AppSettings.AllKeys.Contains(key))
+            if (ConfigurationManager.AppSettings.AllKeys.Contains(key))
                 return ConfigurationManager.AppSettings[key];
-            else if (ConfigurationManager.AppSettings.AllKeys.Contains(key.ToLowerInvariant()))
+            if (ConfigurationManager.AppSettings.AllKeys.Contains(key.ToLowerInvariant()))
             {
                 return ConfigurationManager.AppSettings[key.ToLowerInvariant()];
             }
-            else if (ConfigurationManager.AppSettings.AllKeys.Contains(key.ToUpperInvariant()))
+            if (ConfigurationManager.AppSettings.AllKeys.Contains(key.ToUpperInvariant()))
             {
                 return ConfigurationManager.AppSettings[key.ToUpperInvariant()];
             }
@@ -110,20 +108,19 @@ namespace Unipluss.Sign.Downloader
         NONE,
         ALL,
         PADES,
-        SDO,
+        SDO
     }
 
     public enum MetaDataFormat
     {
         NONE,
         XML,
-        JSON,
+        JSON
     }
 
     public enum FilenameFormat
     {
         SIGNEREDOCUMENTID,
         EXTERNALID
-
     }
 }
