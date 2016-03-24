@@ -23,3 +23,9 @@ The service installs as a Windows Service and subscribes to document events.
 * FilesToDownload (either "sdo", "pades" or "all")
 
 ### [Download](https://github.com/Signereno/Signere.Downloader/raw/master/dist/Signere-Downloader.zip) or pull down the repo and compile the project for yourself.
+
+### Install:
+Setup the .config file with the settings and then run the install.bat file, this will install the Signere downloader as a Windows service and start the service.
+
+### UnInstall
+Run the uninstall.bat file, this will stop and uninstall the Windows service, but not delete any files.
