@@ -123,9 +123,24 @@ namespace Unipluss.Sign.Downloader
                     break;
             }
             if (data != null && extension != null)
-                File.WriteAllBytes(Path.Combine(AppSettingsReader.DownloadPath,
+            {
+                string filepath = Path.Combine(AppSettingsReader.DownloadPath,
                     createFileName(DocumentId, ExternalDocumentId, extension,
-                        string.IsNullOrWhiteSpace(postfix) ? null : postfix)), data);
+                        string.IsNullOrWhiteSpace(postfix) ? null : postfix));
+
+                if (File.Exists(filepath))
+                {
+                    for (int i = 1; i < 10; i++)
+                    {
+                        filepath=filepath.Replace(string.Format( ".{0}",extension), string.Format("{1}.{0}", extension,i));
+                        if(!File.Exists(filepath))
+                            break;
+                    }
+                }
+
+                File.WriteAllBytes(filepath, data);
+            }
+               
         }
 
         private static string createFileName(Guid docid, string externalDocumentId, string extension,
