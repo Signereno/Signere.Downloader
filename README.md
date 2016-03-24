@@ -29,3 +29,6 @@ Setup the .config file with the settings and then run the install.bat file, this
 
 ### Uninstall
 Run the uninstall.bat file, this will stop and uninstall the Windows service, but not delete any files.
+
+### Logging
+The service uses Serilog for logging, and the default settings are log to file and console. For more settings see the  [Serilog wiki](https://github.com/serilog/serilog/wiki/AppSettings)
