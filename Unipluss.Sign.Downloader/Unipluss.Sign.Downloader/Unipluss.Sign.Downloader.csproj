@@ -53,11 +53,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Rebus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rebus.0.99.41\lib\NET45\Rebus.dll</HintPath>
+      <HintPath>..\packages\Rebus.0.99.44\lib\NET45\Rebus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Rebus.AzureServiceBus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rebus.AzureServiceBus.0.99.41\lib\NET45\Rebus.AzureServiceBus.dll</HintPath>
+      <HintPath>..\packages\Rebus.AzureServiceBus.0.99.44\lib\NET45\Rebus.AzureServiceBus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Rebus.Serilog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -101,11 +101,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Unipluss.Sign.Events.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Signere.Events.1.0.3\lib\net45\Unipluss.Sign.Events.Client.dll</HintPath>
+      <HintPath>..\packages\Signere.Events.1.0.4\lib\net45\Unipluss.Sign.Events.Client.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Unipluss.Sign.Events.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Signere.Events.1.0.3\lib\net45\Unipluss.Sign.Events.Entities.dll</HintPath>
+      <HintPath>..\packages\Signere.Events.1.0.4\lib\net45\Unipluss.Sign.Events.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

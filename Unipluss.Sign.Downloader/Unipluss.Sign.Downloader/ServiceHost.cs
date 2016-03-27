@@ -125,8 +125,10 @@ namespace Unipluss.Sign.Downloader
             if (data != null && extension != null)
             {
                 string filepath = Path.Combine(AppSettingsReader.DownloadPath,
-                    createFileName(DocumentId, ExternalDocumentId, extension,
-                        string.IsNullOrWhiteSpace(postfix) ? null : postfix));
+                    createFileName(DocumentId, ExternalDocumentId, extension,string.IsNullOrWhiteSpace(postfix) ? 
+                    null : postfix
+                    )
+                );
 
                 if (File.Exists(filepath))
                 {
