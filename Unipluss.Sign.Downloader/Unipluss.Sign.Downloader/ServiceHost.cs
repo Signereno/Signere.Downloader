@@ -78,7 +78,7 @@ namespace Unipluss.Sign.Downloader
         private Task DocumentPadesSavedEvent(DocumentPadesSavedEvent @event, byte[] pades)
         {
             File.WriteAllBytes(Path.Combine(AppSettingsReader.DownloadPath,
-                createFileName(@event.DocumentId, @event.ExternalDocumentId, "sdo")), pades);
+                createFileName(@event.DocumentId, @event.ExternalDocumentId, "pdf","_signerepades")), pades);
             return Task.FromResult(true);
         }
 
