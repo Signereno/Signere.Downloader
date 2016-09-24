@@ -65,33 +65,51 @@ namespace Unipluss.Sign.Downloader
                     AppSettingsReader.FilesToDownload == FilesToDownload.SDO
                         ? DocumentSDOSavedEvent
                         : (Func<DocumentSDOSavedEvent, byte[], Task>) null)
+                .SubscribeToDocumentFormPartiallySignedEvent(AppSettingsReader.FilesToDownload == FilesToDownload.ALL
+                    ? DocumentFormPartiallySignedEvent
+                    : (Func<DocumentFormPartiallySignedEvent, Task>) null)
+                .SubscribeToDocumentFormSignedEvent(AppSettingsReader.FilesToDownload == FilesToDownload.ALL
+                    ? DocumentFormSignedEvent
+                    : (Func<DocumentFormSignedEvent, Task>) null)
                 .Start();
+        }
+
+        private Task DocumentFormPartiallySignedEvent(DocumentFormPartiallySignedEvent formPartiallySignedEvent)
+        {
+            SerializeEventToFile(formPartiallySignedEvent, formPartiallySignedEvent.DocumentId, "",string.Format("{0}\\{1}","Forms",toSafeFolderName(formPartiallySignedEvent.Schema)), "formData", "partial");
+            return Task.FromResult(true);
+        }
+
+        private Task DocumentFormSignedEvent(DocumentFormSignedEvent formSignedEvent)
+        {
+            SerializeEventToFile(formSignedEvent,formSignedEvent.DocumentId,"", string.Format("{0}\\{1}", "Forms", toSafeFolderName(formSignedEvent.Schema)), "formdata","complete");
+            return Task.FromResult(true);
         }
 
         private Task DocumentSDOSavedEvent(DocumentSDOSavedEvent sdoSavedEvent, byte[] sdo)
         {
             File.WriteAllBytes(Path.Combine(AppSettingsReader.DownloadPath,
-                createFileName(sdoSavedEvent.DocumentId, sdoSavedEvent.ExternalDocumentId, "sdo")), sdo);
+                createFileName(sdoSavedEvent.DocumentId, sdoSavedEvent.ExternalDocumentId,"sdo")), sdo);
             return Task.FromResult(true);
         }
 
         private Task DocumentPadesSavedEvent(DocumentPadesSavedEvent @event, byte[] pades)
         {
             File.WriteAllBytes(Path.Combine(AppSettingsReader.DownloadPath,
-                createFileName(@event.DocumentId, @event.ExternalDocumentId, "pdf","_signerepades")), pades);
+                createFileName(@event.DocumentId, @event.ExternalDocumentId, "pdf","","_signerepades")), pades);
             return Task.FromResult(true);
         }
 
         private Task DocumentPartiallySignedEvent(DocumentPartiallySignedEvent partiallySignedEvent)
         {
             SerializeEventToFile(partiallySignedEvent, partiallySignedEvent.DocumentId,
-                partiallySignedEvent.ExternalDocumentId, "partial");
+                partiallySignedEvent.ExternalDocumentId,"","", "partial");
             return Task.FromResult(true);
         }
 
         private Task DocumentCanceledEvent(DocumentCanceledEvent canceledEvent)
         {
-            SerializeEventToFile(canceledEvent, canceledEvent.DocumentId, canceledEvent.ExternalDocumentId, "cancled");
+            SerializeEventToFile(canceledEvent, canceledEvent.DocumentId, canceledEvent.ExternalDocumentId,"","","canceled");
             return Task.FromResult(true);
         }
 
@@ -101,8 +119,7 @@ namespace Unipluss.Sign.Downloader
             return Task.FromResult(true);
         }
 
-        private static void SerializeEventToFile<T>(T @event, Guid DocumentId, string ExternalDocumentId,
-            string postfix = null)
+        private static void SerializeEventToFile<T>(T @event, Guid DocumentId, string ExternalDocumentId,string subFolder=null, string preFix = null, string postfix = null)
         {
             byte[] data = null;
             string extension = null;
@@ -124,12 +141,27 @@ namespace Unipluss.Sign.Downloader
             }
             if (data != null && extension != null)
             {
-                string filepath = Path.Combine(AppSettingsReader.DownloadPath,
-                    createFileName(DocumentId, ExternalDocumentId, extension,string.IsNullOrWhiteSpace(postfix) ? 
-                    null : postfix
-                    )
-                );
-
+                string filepath = "";
+                if (subFolder != null)
+                {
+                    string folderPath = Path.Combine(AppSettingsReader.DownloadPath, subFolder);
+                    Directory.CreateDirectory(folderPath);
+                    filepath = Path.Combine(folderPath,
+                        createFileName(DocumentId, ExternalDocumentId, extension,
+                            string.IsNullOrWhiteSpace(preFix) ? null : preFix, string.IsNullOrWhiteSpace(postfix)
+                                ? null
+                                : postfix
+                        )
+                    );
+                }
+                else
+                {
+                    filepath = Path.Combine(AppSettingsReader.DownloadPath,
+                        createFileName(DocumentId, ExternalDocumentId, extension, string.IsNullOrWhiteSpace(postfix) ?
+                        null : postfix
+                        )
+                    );
+                }
                 if (File.Exists(filepath))
                 {
                     for (int i = 1; i < 10; i++)
@@ -145,9 +177,17 @@ namespace Unipluss.Sign.Downloader
                
         }
 
-        private static string createFileName(Guid docid, string externalDocumentId, string extension,
-            string postFix = null)
+        private static string createFileName(Guid docid, string externalDocumentId, string extension, string preFix=null, string postFix = null)
         {
+            if (!string.IsNullOrWhiteSpace(preFix))
+            {
+                preFix = string.Format("{0}_", preFix);
+            }
+            else
+            {
+                preFix = string.Empty;
+            }
+
             if (!string.IsNullOrWhiteSpace(postFix))
                 postFix = string.Format("_{0}", postFix);
             else
@@ -155,10 +195,27 @@ namespace Unipluss.Sign.Downloader
                 postFix = string.Empty;
             }
 
-            return string.Format("{0}{1}.{2}", AppSettingsReader.FilenameFormat == FilenameFormat.EXTERNALID
+            return string.Format("{0}{1}{2}.{3}", preFix, AppSettingsReader.FilenameFormat == FilenameFormat.EXTERNALID
                 ? externalDocumentId
                 : docid.ToString(), postFix, extension);
         }
+
+
+        private static string toSafeFolderName(string subFolder)
+        {
+            return subFolder
+                .Replace("\\", "")
+                .Replace("/", "")
+                .Replace("\"", "")
+                .Replace("*", "")
+                .Replace(":", "")
+                .Replace("?", "")
+                .Replace("<", "")
+                .Replace(">", "")
+                .Replace("|", "")
+                .Replace(" ", "_");
+        }
+
 
         public void Stop()
         {
