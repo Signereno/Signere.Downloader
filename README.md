@@ -6,7 +6,8 @@ This a service to download signed documents from Signere.no.
 The service installs as a Windows Service and subscribes to document events.
 ###Features:
 * Download signed document files (SDOs and PAdES PDFs) with documentid or externalid (your id) as the filename.
-* Download document metadata, such as the signers' name(s), sign time, social security number etc. The metadata can also be downloaded as a json or XML file with the same file name as the SDO and the PAdES PDF files and appropriate extensions (either .xml or .json).
+* Download document metadata, such as the signers' name(s), sign time, social security number etc. The metadata can be downloaded as a json or XML file with the same file name as the SDO and the PAdES PDF files and appropriate extensions (either .xml or .json).
+* Download structured form data (ie. inputs from form fields), either as json or XML files.
 
 #### To get the service running you need the following 3 things:
 1. A Signere.no account (contact sales@signere.no to get this)
