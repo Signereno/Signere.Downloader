@@ -10,8 +10,8 @@ The service installs as a Windows Service and subscribes to document events.
 * Download structured form data (ie. inputs from form fields), either as json or XML files.
 
 #### To get the service running you need the following 3 things:
-1. A Signere.no account (contact sales@signere.no to get this)
-2. A Signere.no API ID and associated API keys (contact sales@signere.no to get this)
+1. A Signere.no account (contact salg@signere.no to get this)
+2. A Signere.no API ID and associated API keys (contact salg@signere.no to get this)
 3. A Signere.no event queue connection string (contact support@signere.no to get this)
 
 #### Settings in the .config file you should provide:
